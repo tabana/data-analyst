@@ -1,0 +1,30 @@
+.cell {
+  background: #ffffff;
+  border: 1px solid #999999;
+  float: left;
+  font-size: 10px;
+  font-weight: normal;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  display: table-cell;
+}
+
+.cell:focus {
+  outline: none;
+}
+
+.row {
+ display: table-row;
+}
+
+.row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.dataGrid {
+  display: table;    
+}

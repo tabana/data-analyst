@@ -1,0 +1,8 @@
+let ActionType = {
+    RECEIVE_SCHEMA: 'RECEIVE_SCHEMA'
+    ,CREATE_SCHEMA: 'CREATE_SCHEMA'
+    ,UPDATE_SCHEMA: 'UPDATE_SCHEMA'
+    ,DELETE_SCHEMA: 'DELETE_SCHEMA'
+};
+
+export default ActionType;
