@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import SchemaStore from './SchemaStore';
 import SchemaActions from './SchemaActions';
-import DataGridView from './DataGridView';
 
 class SchemaView extends Component {
   constructor(props) {
