@@ -33,7 +33,7 @@ class SchemaStore extends EventEmitter {
             (dispatch) =>
             {
                 switch(dispatch.action.type) {
-                    case ActionType.RECEIVE_SCHEMA:
+                    case ActionType.REQUEST_SCHEMA:
                         schemaData.rows = dispatch.action.data
                         break;
                     case ActionType.CREATE_SCHEMA:

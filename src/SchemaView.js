@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import SchemaStore from './SchemaStore';
 import SchemaActions from './SchemaActions';
-import DataGrid from './DataGrid';
+import DataGridView from './DataGridView';
 
 class SchemaView extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      columns: []
-    };
+    }
 
     this.updateState = this.updateState.bind(this);
     SchemaStore.get();
@@ -30,21 +29,38 @@ class SchemaView extends Component {
   updateState() {
     let schema = SchemaStore.get();
     this.setState({
-      columns: schema.headers.map(
-        (h) => ({
-          header: h
-          ,headerClickHandler: () => alert('COLUMN 0 HEADER')
-          ,clickHandler: () => alert('CELL IN COLUMN 0')
-        })
-      )
-      ,rows: schema.rows
-    });
+      rows: schema.rows
+    })
+  }
+
+  saveRows(rows) {
+    console.log(rows);
   }
 
   render() {
     if (this.state.rows) {
+      let columns = {
+        headers: [[
+          { value: 'Name', action: 'header' }
+          ,{ value: 'Type', action: 'header' }
+          ,{ value: '', action: 'header' }
+        ]]
+        ,styles: [[
+          { width: '80px', height: '20px' }
+          ,{ width: '80px', height: '20px' }
+          ,{ width: '50px', height: '20px' }
+        ]]
+      };
+      let rows = this.state.rows.map(
+        (r) => r.map((f) => new Object({ value: f, action: 'input' }))
+                .concat(new Object({ value: 'delete', action: 'delete' }))
+      );
+
       return (
-        <DataGrid rows={this.state.rows} columns={this.state.columns} />
+        <DataGridView
+          columns={columns}
+          rows={rows}
+          saveClickHandler={this.saveRows} />
       );
     } else {
       return null;
