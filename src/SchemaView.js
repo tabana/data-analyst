@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactDataGrid from 'react-data-grid';
+import DeleteButtonFormatter from './DeleteButtonFormatter'
 import SchemaStore from './SchemaStore';
 import SchemaActions from './SchemaActions';
 
@@ -36,30 +38,46 @@ class SchemaView extends Component {
     console.log(rows);
   }
 
+  rowGetter(i) {
+    return this._rows[i];
+  }
+  
+  handleGridRowsUpdated({ fromRow, toRow, updated }) {
+    let rows = this.state.rows.slice();
+
+    for (let i = fromRow; i <= toRow; i++) {
+      let rowToUpdate = rows[i];
+      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
+      rows[i] = updatedRow;
+    }
+
+    this.setState({ rows });
+  }
+
+  handleGridDeleteButtonClicked(e, ri) {
+   alert('row ' + ri);
+  }
+
   render() {
     if (this.state.rows) {
-      let columns = {
-        headers: [[
-          { value: 'Name', action: 'header' }
-          ,{ value: 'Type', action: 'header' }
-          ,{ value: '', action: 'header' }
-        ]]
-        ,styles: [[
-          { width: '80px', height: '20px' }
-          ,{ width: '80px', height: '20px' }
-          ,{ width: '50px', height: '20px' }
-        ]]
-      };
+      let columns = [
+          { key: 'name', name: 'Name', editable: true }
+          ,{ key: 'sqlType', name: 'Type', editable: true }
+          ,{ key: 'deleteButton', name: '', formatter:DeleteButtonFormatter }
+      ]
       let rows = this.state.rows.map(
-        (r) => r.map((f) => new Object({ value: f, action: 'input' }))
-                .concat(new Object({ value: 'delete', action: 'delete' }))
+        (r, i) => ({ name: r[0], sqlType: r[1], deleteButton: { rowIndex: i, text: 'delete', clickHandler: (re, ri) => this.handleGridDeleteButtonClicked(re, i) }})
       );
-
+      
       return (
-        <DataGridView
+        <ReactDataGrid
+          enableCellSelect={true}
+          onGridRowsUpdated={this.handleGridRowsUpdated}
+          enableRowSelect={true}
           columns={columns}
-          rows={rows}
-          saveClickHandler={this.saveRows} />
+          rowGetter={(i) => {return rows[i]}}
+          rowsCount={rows.length}
+          minHeight={500} />
       );
     } else {
       return null;

@@ -927,6 +927,10 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+bootstrap@^3.3.7:
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
+
 brace-expansion@^1.0.0:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.7.tgz#3effc3c50e000531fb720eaff80f0ae8ef23cf59"
@@ -4172,6 +4176,10 @@ react-bootstrap@^0.31.0:
     react-prop-types "^0.4.0"
     uncontrollable "^4.1.0"
     warning "^3.0.0"
+
+react-data-grid@^2.0.33:
+  version "2.0.33"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-2.0.33.tgz#37cbf4b6fc0f544e6568fb8499d9939c4ffe72d1"
 
 react-dev-utils@^0.5.2:
   version "0.5.2"
