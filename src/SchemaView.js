@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDataGrid from 'react-data-grid';
-import DeleteButtonFormatter from './DeleteButtonFormatter'
+import ButtonFormatter from './ButtonFormatter'
 import SchemaStore from './SchemaStore';
 import SchemaActions from './SchemaActions';
 
@@ -54,19 +54,27 @@ class SchemaView extends Component {
     this.setState({ rows });
   }
 
-  handleGridDeleteButtonClicked(e, ri) {
-   alert('row ' + ri);
+  handleGridDeleteButtonClicked(element, rowIndex) {
+   alert('row ' + rowIndex);
   }
 
   render() {
     if (this.state.rows) {
       let columns = [
-          { key: 'name', name: 'Name', editable: true }
-          ,{ key: 'sqlType', name: 'Type', editable: true }
-          ,{ key: 'deleteButton', name: '', formatter:DeleteButtonFormatter }
+          { key: 'name', name: 'Name', editable: true, resizable: true }
+          ,{ key: 'sqlType', name: 'Type', editable: true, resizable: true }
+          ,{ key: 'deleteButton', name: '', formatter:ButtonFormatter, resizable: true }
       ]
       let rows = this.state.rows.map(
-        (r, i) => ({ name: r[0], sqlType: r[1], deleteButton: { rowIndex: i, text: 'delete', clickHandler: (re, ri) => this.handleGridDeleteButtonClicked(re, i) }})
+        (r, i) => ({
+          name: r[0],
+          sqlType: r[1],
+          deleteButton: {
+           rowIndex: i,
+           text: 'delete',
+           clickHandler: (e, ri) => this.handleGridDeleteButtonClicked(e, i)
+          }
+        })
       );
       
       return (
