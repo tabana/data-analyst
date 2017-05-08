@@ -55,7 +55,8 @@ class SchemaView extends Component {
   }
 
   handleGridDeleteButtonClicked(element, rowIndex) {
-   alert('row ' + rowIndex);
+    this.state.rows.splice(rowIndex, 1);
+    this.setState(this.state);
   }
 
   render() {
