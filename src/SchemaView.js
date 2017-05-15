@@ -9,10 +9,14 @@ class SchemaView extends Component {
     super(props);
 
     this.state = {
+      //rows: [[]]
+      selectedIndexes: []
     }
 
+    this.handleRowsSelected = this.handleRowsSelected.bind(this);
+    this.handleRowsDeselected = this.handleRowsDeselected.bind(this);
     this.updateState = this.updateState.bind(this);
-    SchemaStore.get();
+    SchemaStore.fetchSchema(this.props.name);
   }
 
   componentWillMount() {
@@ -20,7 +24,7 @@ class SchemaView extends Component {
   }
 
   componentDidMount() {
-    SchemaActions.getSchema();
+    SchemaStore.fetchSchema(this.props.name);
   }
 
   componentWillUnmount() {
@@ -28,35 +32,31 @@ class SchemaView extends Component {
   }
 
   updateState() {
-    let schema = SchemaStore.get();
+    let schema = SchemaStore.getSchema(this.props.name);
     this.setState({
       rows: schema.rows
     })
   }
 
-  saveRows(rows) {
-    console.log(rows);
-  }
-
   rowGetter(i) {
-    return this._rows[i];
+    return this.state.rows[i];
   }
   
-  handleGridRowsUpdated({ fromRow, toRow, updated }) {
-    let rows = this.state.rows.slice();
-
-    for (let i = fromRow; i <= toRow; i++) {
-      let rowToUpdate = rows[i];
-      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
-      rows[i] = updatedRow;
-    }
-
-    this.setState({ rows });
+  handleGridRowsUpdated({ fromRow, toRow, update }) {
+    SchemaActions.updateSchema({ name: this.props.name, fromRowIndex: fromRow, toRowIndex: toRow, update: update });
   }
 
-  handleGridDeleteButtonClicked(element, rowIndex) {
-    this.state.rows.splice(rowIndex, 1);
-    this.setState(this.state);
+  handleGridDeleteButtonClicked(element, deletedRowIndex) {
+    SchemaActions.deleteSchemaRow({ name: this.props.name, deletedRowIndex: deletedRowIndex });
+  }
+
+  handleRowsSelected(rows) {
+    this.setState({selectedIndexes: this.state.selectedIndexes.concat(rows.map(r => r.rowIdx))});
+  }
+
+  handleRowsDeselected(rows) {
+    let rowIndexes = rows.map(r => r.rowIdx);
+    this.setState({selectedIndexes: this.state.selectedIndexes.filter(i => rowIndexes.indexOf(i) === -1 )});
   }
 
   render() {
@@ -66,6 +66,7 @@ class SchemaView extends Component {
           ,{ key: 'sqlType', name: 'Type', editable: true, resizable: true }
           ,{ key: 'deleteButton', name: '', formatter:ButtonFormatter, resizable: true }
       ]
+
       let rows = this.state.rows.map(
         (r, i) => ({
           name: r[0],
@@ -82,11 +83,19 @@ class SchemaView extends Component {
         <ReactDataGrid
           enableCellSelect={true}
           onGridRowsUpdated={this.handleGridRowsUpdated}
-          enableRowSelect={true}
           columns={columns}
           rowGetter={(i) => {return rows[i]}}
           rowsCount={rows.length}
-          minHeight={500} />
+          minHeight={500}
+          rowSelection={{
+            showCheckbox: true,
+            enableShiftSelect: true,
+            onRowsSelected: this.handleRowsSelected,
+            onRowsDeselected: this.handleRowsDeselected,
+            selectBy: {
+              indexes: this.state.selectedIndexes
+            }
+          }} />
       );
     } else {
       return null;
