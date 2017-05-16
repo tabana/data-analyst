@@ -16,8 +16,6 @@ class SchemaView extends Component {
       selectedIndexes: []
     }
 
-    this.handleRowsSelected = this.handleRowsSelected.bind(this);
-    this.handleRowsDeselected = this.handleRowsDeselected.bind(this);
     this.updateState = this.updateState.bind(this);
     SchemaStore.fetchSchema(this.props.name);
   }
@@ -62,6 +60,10 @@ class SchemaView extends Component {
     this.setState({selectedIndexes: this.state.selectedIndexes.filter(i => rowIndexes.indexOf(i) === -1 )});
   }
 
+  handleAddButtonClicked() {
+    alert('Collect stamps and save!');
+  }
+
   render() {
     if (this.state.rows) {
       let columns = [
@@ -96,8 +98,8 @@ class SchemaView extends Component {
                 rowSelection={{
                   showCheckbox: true,
                   enableShiftSelect: true,
-                  onRowsSelected: this.handleRowsSelected,
-                  onRowsDeselected: this.handleRowsDeselected,
+                  onRowsSelected: (r) => this.handleRowsSelected(r),
+                  onRowsDeselected: (r) => this.handleRowsDeselected(r),
                   selectBy: {
                     indexes: this.state.selectedIndexes
                   }
@@ -106,6 +108,9 @@ class SchemaView extends Component {
             </Row>
             <Row className="show-grid">
               <Col>
+                <button className='button independentButton' onClick={() => this.handleAddButtonClicked()}>
+                  Add
+                </button>
               </Col>
             </Row>
           </Grid>
