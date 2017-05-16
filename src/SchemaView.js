@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import ReactDataGrid from 'react-data-grid';
 import ButtonFormatter from './ButtonFormatter'
 import SchemaStore from './SchemaStore';
@@ -80,22 +83,32 @@ class SchemaView extends Component {
       );
       
       return (
-        <ReactDataGrid
-          enableCellSelect={true}
-          onGridRowsUpdated={this.handleGridRowsUpdated}
-          columns={columns}
-          rowGetter={(i) => {return rows[i]}}
-          rowsCount={rows.length}
-          minHeight={500}
-          rowSelection={{
-            showCheckbox: true,
-            enableShiftSelect: true,
-            onRowsSelected: this.handleRowsSelected,
-            onRowsDeselected: this.handleRowsDeselected,
-            selectBy: {
-              indexes: this.state.selectedIndexes
-            }
-          }} />
+        <Grid>
+          <Row className="show-grid">
+            <Col>
+              <ReactDataGrid
+                enableCellSelect={true}
+                onGridRowsUpdated={this.handleGridRowsUpdated}
+                columns={columns}
+                rowGetter={(i) => {return rows[i]}}
+                rowsCount={rows.length}
+                minHeight={500}
+                rowSelection={{
+                  showCheckbox: true,
+                  enableShiftSelect: true,
+                  onRowsSelected: this.handleRowsSelected,
+                  onRowsDeselected: this.handleRowsDeselected,
+                  selectBy: {
+                    indexes: this.state.selectedIndexes
+                  }
+                }} />
+              </Col>
+            </Row>
+            <Row className="show-grid">
+              <Col>
+              </Col>
+            </Row>
+          </Grid>
       );
     } else {
       return null;

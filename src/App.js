@@ -14,6 +14,9 @@ class App extends Component {
             <Col md={6}>
               <SchemaView name='TdmlCalypso2' />
             </Col>
+            <Col md={6}>
+              <SchemaView name='TdmlCalypso' />
+            </Col>
           </Row>
         </Grid>
       </div>
