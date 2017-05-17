@@ -1,4 +1,3 @@
-import React from 'react';
 import EventEmitter from 'events';
 import AppDispatcher from './AppDispatcher';
 import ActionType from './ActionType';
@@ -7,7 +6,7 @@ let CHANGE_EVENT = 'change';
 
 let schemaData = [];
 
-class schema {
+class Schema {
     constructor(rows) {
         this.headers = ['Name', 'Type'];
         this.rows = rows;
@@ -29,20 +28,22 @@ class SchemaStore extends EventEmitter {
             .then((obj) => {
                 if (obj.length > 0) {
                     let rows = obj[0].entities.map((e) => [e.name, e.sqlType]);
-                    schemaData[name] = new schema(rows);
-                    this.emit(CHANGE_EVENT);
+                    schemaData[name] = new Schema(rows);
+                    this.emit(CHANGE_EVENT, name);
                 }
             })
         });
     }
 
-    create(name, newRows) {
-        let rows = schemaData[name].rows.push(newRows);
+    create(name) {
+        let rows = schemaData[name].rows;
+        rows.push(['', '']);
         this.sync(name, rows);
     }
 
-    add(name, row) {
-        let rows = schemaData[name].rows.push(row);
+    add(name) {
+        let rows = schemaData[name].rows;
+        rows.push(['', '']);
         this.sync(name, rows);
     }
 
@@ -51,12 +52,13 @@ class SchemaStore extends EventEmitter {
         this.sync(name, rows);
     }
 
-    modify(name, fromRowIndex, toRowIndex, update) {
+    modify(name, fromRowIndex, toRowIndex, columnIndex, value) {
         let rows = schemaData[name].rows;
 
         for (let i = fromRowIndex; i <= toRowIndex; i++) {
             let rowToUpdate = rows[i];
-            let updatedRow = React.addons.update(rowToUpdate, { $merge: update });
+            let updatedRow = rowToUpdate.slice();
+            updatedRow[columnIndex] = value;
             rows[i] = updatedRow;
         }
 
@@ -67,7 +69,7 @@ class SchemaStore extends EventEmitter {
         let schemas = JSON.stringify([
             {
                 name: name
-                ,entities: rows.map((r) => {return { name: r[0], sqlType: r[1]}})
+                ,entities: rows.map((r) => { return { name: r[0], sqlType: r[1] } })
             }
         ]);
 
@@ -83,7 +85,7 @@ class SchemaStore extends EventEmitter {
             }
         )
         .then((response) => {
-            this.emit('update');
+            this.fetchSchema(name);
         })
     }
 
@@ -95,13 +97,21 @@ class SchemaStore extends EventEmitter {
             {
                 switch(dispatch.action.type) {
                     case ActionType.CREATE_SCHEMA:
-                        this.add(dispatch.action.data); 
+                        this.add(dispatch.action.data.name); 
                         break;
-                    case ActionType.UPDATE_SCHEMA:
-                        this.modify(dispatch.action.data.name, dispatch.action.data.fromRowIndex, dispatch.action.data.toRowIndex, dispatch.action.data.updatedRows);
+                    case ActionType.UPDATE_SCHEMA_ROWS:
+                        this.modify(
+                            dispatch.action.data.name
+                            ,dispatch.action.data.fromRowIndex
+                            ,dispatch.action.data.toRowIndex
+                            ,dispatch.action.data.columnIndex
+                            , dispatch.action.data.value);
                         break;
-                    case ActionType.DELETE_SCHEMA:
+                    case ActionType.DELETE_SCHEMA_ROW:
                         this.remove(dispatch.action.data.name, dispatch.action.data.deletedRowIndex);
+                        break;
+                    case ActionType.ADD_SCHEMA_ROW:
+                        this.add(dispatch.action.data.name); 
                         break;
                     default:
                         return true;

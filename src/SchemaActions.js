@@ -14,16 +14,23 @@ class SchemaActions {
     
     updateSchema(action) {
         AppDispatcher.handleViewAction({
-            type: ActionType.UPDATE_SCHEMA
+            type: ActionType.UPDATE_SCHEMA_ROWS
             ,data: action
         });
     }
 
     deleteSchemaRow(action) {
         AppDispatcher.handleViewAction({
-            type: ActionType.DELETE_SCHEMA
+            type: ActionType.DELETE_SCHEMA_ROW
             ,data: action
         });
+    }
+
+    addSchemaRow(action) {
+        AppDispatcher.handleViewAction({
+            type: ActionType.ADD_SCHEMA_ROW
+            ,data: action
+        })
     }
 };
 
