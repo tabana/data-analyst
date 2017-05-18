@@ -1,10 +1,7 @@
 import AppDispatcher from './AppDispatcher';
 import ActionType from './ActionType';
 
-class SchemaActions {
-    getSchema(name) {
-    }
-    
+class SchemaActions {   
     createSchema(action) {
         AppDispatcher.handleViewAction({
             type: ActionType.CREATE_SCHEMA

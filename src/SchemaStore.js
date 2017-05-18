@@ -16,8 +16,7 @@ class Schema {
 const url = 'http://localhost:3579/transformation/schema';
 
 class SchemaStore extends EventEmitter {
-    getSchema(name)
-    {
+    getSchema(name) {
         return schemaData[name];
     }
 
@@ -66,8 +65,7 @@ class SchemaStore extends EventEmitter {
     }
 
     sync(name, rows) {
-        let schemas = JSON.stringify([
-            {
+        let schemas = JSON.stringify([{
                 name: name
                 ,entities: rows.map((r) => { return { name: r[0], sqlType: r[1] } })
             }
@@ -93,8 +91,7 @@ class SchemaStore extends EventEmitter {
         super();
 
         AppDispatcher.register(
-            (dispatch) =>
-            {
+            (dispatch) => {
                 switch(dispatch.action.type) {
                     case ActionType.CREATE_SCHEMA:
                         this.add(dispatch.action.data.name); 
