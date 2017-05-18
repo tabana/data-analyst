@@ -3,9 +3,11 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ReactDataGrid from 'react-data-grid';
+//import { Editors, Formatters } from 'react-data-grid-addons';
 import ButtonFormatter from './ButtonFormatter'
 import SchemaStore from './SchemaStore';
 import SchemaActions from './SchemaActions';
+import './Button.css';
 
 class SchemaView extends Component {
   constructor(props) {
@@ -15,7 +17,7 @@ class SchemaView extends Component {
       columns: [
           { key: 'name', name: 'Name', editable: true, resizable: true }
           ,{ key: 'sqlType', name: 'Type', editable: true, resizable: true }
-          ,{ key: 'deleteButton', name: '', formatter:ButtonFormatter, resizable: true }
+          ,{ key: 'deleteButton', name: '', formatter: ButtonFormatter, resizable: true }
       ],
       selectedIndexes: []
     }
@@ -84,12 +86,11 @@ class SchemaView extends Component {
 
       let rows = this.state.rows.map(
         (r, i) => ({
-          name: r[0],
-          sqlType: r[1],
-          deleteButton: {
-           rowIndex: i,
-           text: 'delete',
-           clickHandler: (e, ri) => this.handleGridDeleteButtonClicked(e, i)
+          name: r[0]
+          ,sqlType: r[1]
+          ,deleteButton: {
+           text: 'delete'
+           ,clickHandler: (e, ri) => this.handleGridDeleteButtonClicked(e, i)
           }
         })
       );
@@ -113,7 +114,8 @@ class SchemaView extends Component {
                   selectBy: {
                     indexes: this.state.selectedIndexes
                   }
-                } } />
+                } }
+              />
               </Col>
             </Row>
             <Row className="show-grid">

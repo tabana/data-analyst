@@ -1,0 +1,26 @@
+.button {
+  text-align: center;
+  text-decoration: none;
+  color: blue;
+  font-weight: normal;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.independentButton {
+  cursor: pointer;  
+  width: 40px;
+  margin: 0px 2px 0px 0px;
+  padding: 0px 4px 0px 4px;
+  display: inline-block;
+  border: 1px solid #999999;
+}
+
+.button:active {
+  background-color: #909090;
+}
+
+.button:focus {
+  outline: none;
+  background-color: #eeeeee;
+}
