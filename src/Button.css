@@ -7,13 +7,20 @@
   cursor: pointer;
 }
 
+.cellButton {
+  position: relative;
+  top: 0px;
+  right: 0px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
+
 .independentButton {
   cursor: pointer;  
   width: 40px;
   margin: 0px 2px 0px 0px;
   padding: 0px 4px 0px 4px;
   display: inline-block;
-  border: 1px solid #999999;
 }
 
 .button:active {

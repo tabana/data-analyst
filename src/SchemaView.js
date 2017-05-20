@@ -3,7 +3,6 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ReactDataGrid from 'react-data-grid';
-//import { Editors, Formatters } from 'react-data-grid-addons';
 import ButtonFormatter from './ButtonFormatter'
 import SchemaStore from './SchemaStore';
 import SchemaActions from './SchemaActions';
@@ -17,7 +16,7 @@ class SchemaView extends Component {
       columns: [
           { key: 'name', name: 'Name', editable: true, resizable: true }
           ,{ key: 'sqlType', name: 'Type', editable: true, resizable: true }
-          ,{ key: 'deleteButton', name: '', formatter: ButtonFormatter, resizable: true }
+          ,{ key: 'deleteButton', name: '', width: 80, formatter: ButtonFormatter }
       ],
       selectedIndexes: []
     }

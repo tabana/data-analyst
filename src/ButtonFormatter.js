@@ -7,7 +7,10 @@ class ButtonFormatter extends Component {
 
     render() {
         return (
-            <button className='button' onClick={(e, i) =>this.props.value.clickHandler(e, i)}>{this.props.value.text}</button>
+            <button
+                className='button cellButton'
+                onClick={(e, i) =>this.props.value.clickHandler(e, i)}>{this.props.value.text}
+            </button>
         );
     }
 }

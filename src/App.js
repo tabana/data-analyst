@@ -11,7 +11,7 @@ class App extends Component {
       <div>
         <Grid>
           <Row className="show-grid">
-            <Col md={12}>
+            <Col md={6}>
               <SchemaView name='TdmlCalypso2' />
             </Col>
           </Row>
