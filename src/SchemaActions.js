@@ -16,9 +16,9 @@ class SchemaActions {
         });
     }
 
-    deleteSchemaRow(action) {
+    deleteSchemaRows(action) {
         AppDispatcher.handleViewAction({
-            type: ActionType.DELETE_SCHEMA_ROW
+            type: ActionType.DELETE_SCHEMA_ROWS
             ,data: action
         });
     }

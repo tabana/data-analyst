@@ -63,7 +63,11 @@ class SchemaView extends Component {
   }
 
   handleGridDeleteButtonClicked(element, deletedRowIndex) {
-    SchemaActions.deleteSchemaRow({ name: this.props.name, deletedRowIndex: deletedRowIndex });
+    SchemaActions.deleteSchemaRows({ name: this.props.name, deletedRowIndexes: [deletedRowIndex] });
+  }
+
+  handleDeleteButtonClicked(element) {
+    SchemaActions.deleteSchemaRows({ name: this.props.name, deletedRowIndexes: this.state.selectedIndexes });
   }
 
   handleAddButtonClicked() {
@@ -110,17 +114,18 @@ class SchemaView extends Component {
                   enableShiftSelect: true,
                   onRowsSelected: (r) => this.handleRowsSelected(r),
                   onRowsDeselected: (r) => this.handleRowsDeselected(r),
-                  selectBy: {
-                    indexes: this.state.selectedIndexes
-                  }
+                  selectBy: { indexes: this.state.selectedIndexes }
                 } }
               />
-              </Col>
+             </Col>
             </Row>
             <Row className="show-grid">
               <Col>
                 <button className='button independentButton' onClick={ () => this.handleAddButtonClicked() }>
                   Add
+                </button>
+                <button className='button independentButton' onClick={ () => this.handleDeleteButtonClicked() }>
+                  Delete
                 </button>
               </Col>
             </Row>

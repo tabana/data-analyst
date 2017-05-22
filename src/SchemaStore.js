@@ -46,9 +46,13 @@ class SchemaStore extends EventEmitter {
         this.sync(name, rows);
     }
 
-    remove(name, deletedRowIndex) {
+    remove(name, deletedRowIndexes) {
         let rows = schemaData[name].rows;
-        rows.splice(deletedRowIndex, 1);
+
+        for (let index of deletedRowIndexes) {
+            rows.splice(index, 1);
+        }
+        
         this.sync(name, rows);
     }
 
@@ -103,10 +107,12 @@ class SchemaStore extends EventEmitter {
                             ,dispatch.action.data.fromRowIndex
                             ,dispatch.action.data.toRowIndex
                             ,dispatch.action.data.columnIndex
-                            , dispatch.action.data.value);
+                            ,dispatch.action.data.value);
                         break;
-                    case ActionType.DELETE_SCHEMA_ROW:
-                        this.remove(dispatch.action.data.name, dispatch.action.data.deletedRowIndex);
+                    case ActionType.DELETE_SCHEMA_ROWS:
+                        this.remove(
+                            dispatch.action.data.name
+                            ,dispatch.action.data.deletedRowIndexes);
                         break;
                     case ActionType.ADD_SCHEMA_ROW:
                         this.add(dispatch.action.data.name); 
