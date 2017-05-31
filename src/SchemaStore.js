@@ -1,49 +1,27 @@
 import EventEmitter from 'events';
 import AppDispatcher from './AppDispatcher';
 import ActionType from './ActionType';
+import SchemaService from './SchemaService';
 
 let CHANGE_EVENT = 'change';
 
 let schemaData = [];
-
-class Schema {
-    constructor(rows) {
-        this.headers = ['Name', 'Type'];
-        this.rows = rows;
-    }
-}
-
-const url = 'http://localhost:3579/transformation/schema';
 
 class SchemaStore extends EventEmitter {
     getSchema(name) {
         return schemaData[name];
     }
 
-    fetchSchema(name) {
-        fetch(url + '/' + name, { method: 'GET' })
-        .then((response) => {
-            response.json()
-            .then((obj) => {
-                if (obj.length > 0) {
-                    let rows = obj[0].entities.map((e) => [e.name, e.sqlType]);
-                    schemaData[name] = new Schema(rows);
-                    this.emit(CHANGE_EVENT, name);
-                }
-            })
-        });
-    }
-
     create(name) {
         let rows = schemaData[name].rows;
         rows.push(['', '']);
-        this.sync(name, rows);
+        schemaData[name] = SchemaService.sync(name, rows);
     }
 
     add(name) {
         let rows = schemaData[name].rows;
         rows.push(['', '']);
-        this.sync(name, rows);
+        schemaData[name] = SchemaService.sync(name, rows);
     }
 
     remove(name, deletedRowIndexes) {
@@ -53,7 +31,7 @@ class SchemaStore extends EventEmitter {
             rows.splice(index, 1);
         }
         
-        this.sync(name, rows);
+        schemaData[name] = SchemaService.sync(name, rows);
     }
 
     modify(name, fromRowIndex, toRowIndex, columnIndex, value) {
@@ -66,30 +44,7 @@ class SchemaStore extends EventEmitter {
             rows[i] = updatedRow;
         }
 
-        this.sync(name, rows);
-    }
-
-    sync(name, rows) {
-        let schemas = JSON.stringify([{
-                name: name
-                ,entities: rows.map((r) => { return { name: r[0], sqlType: r[1] } })
-            }
-        ]);
-
-        fetch(
-            url
-            ,{
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-                , method: 'POST'
-                , body:schemas
-            }
-        )
-        .then((response) => {
-            this.fetchSchema(name);
-        })
+        schemaData[name] = SchemaService.sync(name, rows);
     }
 
     constructor() {
@@ -98,6 +53,13 @@ class SchemaStore extends EventEmitter {
         AppDispatcher.register(
             (dispatch) => {
                 switch(dispatch.action.type) {
+                    case ActionType.LOAD_SCHEMA:
+                        SchemaService.load(dispatch.action.data.name);
+                        break;
+                    case ActionType.SCHEMA_LOADED:
+                        schemaData[dispatch.action.data.name] = dispatch.action.data.rows;
+                        this.emit(CHANGE_EVENT, dispatch.action.data.name);
+                        break;
                     case ActionType.CREATE_SCHEMA:
                         this.add(dispatch.action.data.name); 
                         break;

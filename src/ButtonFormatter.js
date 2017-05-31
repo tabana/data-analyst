@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 class ButtonFormatter extends Component {
-    propTypes = {
-        value: React.PropTypes.object
-    }
-
     render() {
         return (
             <button

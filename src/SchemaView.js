@@ -29,7 +29,7 @@ class SchemaView extends Component {
   }
 
   componentDidMount() {
-    SchemaStore.fetchSchema(this.props.name);
+    SchemaActions.loadSchema({ name: this.props.name });
   }
 
   componentWillUnmount() {
