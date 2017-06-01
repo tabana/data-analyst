@@ -14,9 +14,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5",
-    "webpack": "^2.6.0",
-    "webpack-dev-server": "2"
+    "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
