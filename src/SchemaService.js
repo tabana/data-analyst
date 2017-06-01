@@ -21,7 +21,7 @@ class DataService {
     sync(name, rows) {
         let schemas = JSON.stringify([{
                 name: name
-                ,entities: rows.map((r) => { return { name: r[0], sqlType: r[1] } })
+                , entities: rows.map((r) => { return { name: r[0], sqlType: r[1] } })
             }
         ]);
 
