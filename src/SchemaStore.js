@@ -13,36 +13,35 @@ class SchemaStore extends EventEmitter {
     }
 
     create(name) {
-        let rows = schemaData[name].rows;
-        rows.push(['', '']);
+        let rows = [...schemaData[name].rows, ['', '']];
         schemaData[name] = SchemaService.sync(name, rows);
     }
 
     add(name) {
-        let rows = schemaData[name].rows;
-        rows.push(['', '']);
+        let rows = [...schemaData[name].rows, ['', '']];
         schemaData[name] = SchemaService.sync(name, rows);
     }
 
     remove(name, deletedRowIndexes) {
-        let rows = schemaData[name].rows;
-
-        for (let index of deletedRowIndexes) {
-            rows.splice(index, 1);
-        }
-        
+        let rows = schemaData[name].rows.filter(
+            (r, i) => { return deletedRowIndexes.indexOf(i) < 0 }
+        );
+       
         schemaData[name] = SchemaService.sync(name, rows);
     }
 
     modify(name, fromRowIndex, toRowIndex, columnIndex, value) {
-        let rows = schemaData[name].rows;
+        let rows = schemaData[name].rows.map(
+            (r, i) => {
+                if (fromRowIndex <= i && i <= toRowIndex) {
+                    let n = [...r];
+                    n[columnIndex] = value;
+                    return n;
+                }
 
-        for (let i = fromRowIndex; i <= toRowIndex; i++) {
-            let rowToUpdate = rows[i];
-            let updatedRow = rowToUpdate.slice();
-            updatedRow[columnIndex] = value;
-            rows[i] = updatedRow;
-        }
+                return [...r];
+            }
+        );
 
         schemaData[name] = SchemaService.sync(name, rows);
     }
