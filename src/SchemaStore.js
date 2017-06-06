@@ -12,6 +12,10 @@ class SchemaStore extends EventEmitter {
         return schemaData[name];
     }
 
+    load(name) {
+        SchemaService.load(name);
+    }
+
     create(name) {
         let rows = [...schemaData[name].rows, ['', '']];
         schemaData[name] = SchemaService.sync(name, rows);
@@ -53,7 +57,7 @@ class SchemaStore extends EventEmitter {
             (dispatch) => {
                 switch(dispatch.action.type) {
                     case ActionType.LOAD_SCHEMA:
-                        SchemaService.load(dispatch.action.data.name);
+                        this.load(dispatch.action.data.name);
                         break;
                     case ActionType.SCHEMA_LOADED:
                         schemaData[dispatch.action.data.name] = dispatch.action.data.rows;
