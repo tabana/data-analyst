@@ -5,7 +5,7 @@ class ButtonFormatter extends Component {
         return (
             <button
                 className='button cellButton'
-                onClick={(e, i) =>this.props.value.clickHandler(e, i)}>{this.props.value.text}
+                onClick={(e, i) => this.props.value.clickHandler(e, i)}>{this.props.value.text}
             </button>
         );
     }

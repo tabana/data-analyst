@@ -30,7 +30,7 @@ class SchemaStore extends EventEmitter {
         let rows = schemaData[name].rows.filter(
             (r, i) => { return deletedRowIndexes.indexOf(i) < 0 }
         );
-       
+
         schemaData[name] = SchemaService.sync(name, rows);
     }
 
@@ -55,7 +55,7 @@ class SchemaStore extends EventEmitter {
 
         AppDispatcher.register(
             (dispatch) => {
-                switch(dispatch.action.type) {
+                switch (dispatch.action.type) {
                     case ActionType.LOAD_SCHEMA:
                         this.load(dispatch.action.data.name);
                         break;
@@ -64,23 +64,23 @@ class SchemaStore extends EventEmitter {
                         this.emit(CHANGE_EVENT, dispatch.action.data.name);
                         break;
                     case ActionType.CREATE_SCHEMA:
-                        this.add(dispatch.action.data.name); 
+                        this.add(dispatch.action.data.name);
                         break;
                     case ActionType.UPDATE_SCHEMA_ROWS:
                         this.modify(
                             dispatch.action.data.name
-                            ,dispatch.action.data.fromRowIndex
-                            ,dispatch.action.data.toRowIndex
-                            ,dispatch.action.data.columnIndex
-                            ,dispatch.action.data.value);
+                            , dispatch.action.data.fromRowIndex
+                            , dispatch.action.data.toRowIndex
+                            , dispatch.action.data.columnIndex
+                            , dispatch.action.data.value);
                         break;
                     case ActionType.DELETE_SCHEMA_ROWS:
                         this.remove(
                             dispatch.action.data.name
-                            ,dispatch.action.data.deletedRowIndexes);
+                            , dispatch.action.data.deletedRowIndexes);
                         break;
                     case ActionType.ADD_SCHEMA_ROW:
-                        this.add(dispatch.action.data.name); 
+                        this.add(dispatch.action.data.name);
                         break;
                     default:
                         return true;

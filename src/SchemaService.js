@@ -3,7 +3,7 @@ import Schema from './Schema';
 
 const url = 'http://localhost:3579/transformation/schema';
 
-class DataService {
+class SchemaService {
     load(name) {
         fetch(url + '/' + name, { method: 'GET' })
         .then((response) => {
@@ -42,4 +42,4 @@ class DataService {
     }
 }
 
-export default new DataService();
+export default new SchemaService();
